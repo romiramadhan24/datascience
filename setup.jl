@@ -55,7 +55,7 @@ end
 
 # 2. Otomatis update semua package ke versi terbaru
 @info "Memeriksa dan memperbarui versi package..."
-Pkg.update()
+#Pkg.update()
 Pkg.instantiate()
 
 @info "Selesai! Environment Julia kamu sudah dalam versi paling canggih dan clean."
