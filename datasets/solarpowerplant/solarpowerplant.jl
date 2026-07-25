@@ -7,9 +7,10 @@ using CategoricalArrays
 using PythonCall
 using DotEnv
 using PrettyTables
+using Revise
+using OhMyREPL
 
 # Load .env & connect
-DotEnv.load!(joinpath(@__DIR__, "..", "..", ".env"))
 db = LibPQ.Connection(ENV["SUPABASE_CONN_STR"])
 
 # Query & print (aman dari connection leak)
