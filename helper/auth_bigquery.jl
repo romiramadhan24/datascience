@@ -53,3 +53,11 @@ function run_prql(client, prql_query::String)
     sql_query = pyconvert(String, py_prql.compile(prql_query))
     return run_query(client, sql_query)
 end
+
+# 1. Definisikan variabel pendek di tingkat helper
+const db = "database-collection-503407"
+# 2. Set variabel tersebut sebagai default argument di fungsi q()
+function q(prql_str::String; project::String=db)
+    client = get_bq_client(project)
+    return run_prql(client, prql_str)
+end
