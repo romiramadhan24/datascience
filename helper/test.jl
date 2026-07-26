@@ -1,21 +1,17 @@
 include("/workspaces/datascience/helper/auth.jl")
-using .BigQueryHelper
 
-# 1. Konfigurasi
-const JSON_KEY   = "/workspaces/datascience/bigquery.json"
-const PROJECT_ID = "database-collection-503407"
-const DATASET_ID = "dataset"
-const TABLE_NAME = "worldenergy"
+json_key   = "/workspaces/datascience/bigquery.json"
+project_id = "database-collection-503407"
+dataset_id = "dataset"
+table_name = "worldenergy"
 
-# 2. Panggil fungsi secara eksplisit dengan nama modulnya
-client = BigQueryHelper.get_bq_client(JSON_KEY, PROJECT_ID)
+client = get_bq_client(json_key, project_id)
 
-# 3. Jalankan Query
 sql = """
     SELECT * 
-    FROM $PROJECT_ID.$DATASET_ID.$TABLE_NAME 
+    FROM `$project_id.$dataset_id.$table_name` 
     LIMIT 10
 """
 
-df = BigQueryHelper.run_query(client, sql)
+df = run_query(client, sql)
 println(df)

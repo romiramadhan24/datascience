@@ -40,6 +40,8 @@ Manifest*.toml
 .pixi/
 __pycache__/
 *.pyc
+.pixi/*
+!.pixi/config.toml
 
 # ==============================================================================
 # 📊 DATASETS & TEMPORARY DATA FILES
