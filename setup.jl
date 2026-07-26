@@ -11,9 +11,6 @@ required_packages = [
     "Arrow",
     "CategoricalArrays",
 
-    # Visualisasi & Grafik Modern
-    "CairoMakie",         # Visualisasi 2D paling canggih & presisi
-
     # Statistik & Probabilitas
     "StatsBase",
     "Distributions",
@@ -24,6 +21,7 @@ required_packages = [
     "DBInterface",
     "HTTP",
     "DotEnv",
+    "GoogleCloud",
 
     # Machine Learning & Deep Learning Modern
     "MLJ",                # Ekosistem ML Klasik
@@ -56,6 +54,6 @@ end
 # 2. Otomatis update semua package ke versi terbaru
 @info "Memeriksa dan memperbarui versi package..."
 #Pkg.update()
-Pkg.instantiate()
+#Pkg.instantiate()
 
 @info "Selesai! Environment Julia kamu sudah dalam versi paling canggih dan clean."
