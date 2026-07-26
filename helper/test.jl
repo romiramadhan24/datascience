@@ -11,7 +11,7 @@ prql = """
 prql target:sql.bigquery
 
 from `$project_id.$dataset_id.$table_name`
-take 10
+take 5
 """
 
 df = run_prql(client, prql)
