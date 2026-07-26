@@ -55,7 +55,13 @@ required_julia_packages = [
 # ==============================================================================
 required_python_packages = [
     "google-cloud-bigquery",
-    "google-auth"
+    "google-auth",
+    "pyarrow"
+]
+
+# Paket yang HANYA ada di PyPI (pip)
+required_pip_packages = [
+    "prql-python"
 ]
 
 # ==============================================================================
@@ -83,6 +89,11 @@ using CondaPkg
 @info "Memeriksa dan menginstal paket Python..."
 for py_pkg in required_python_packages
     CondaPkg.add(py_pkg)
+end
+
+@info "Memeriksa dan menginstal paket Pip (PyPI)..."
+for pip_pkg in required_pip_packages
+    CondaPkg.add_pip(pip_pkg) # <-- Gunakan add_pip untuk prql-python
 end
 
 @info "Jalankan prekompilasi paralel..."

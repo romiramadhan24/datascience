@@ -1,17 +1,18 @@
-include("/workspaces/datascience/helper/auth.jl")
+include("/workspaces/datascience/helper/auth_bigquery.jl")
 
-json_key   = "/workspaces/datascience/bigquery.json"
 project_id = "database-collection-503407"
 dataset_id = "dataset"
 table_name = "worldenergy"
 
-client = get_bq_client(json_key, project_id)
+# Cukup masukkan project_id, kredensial otomatis dibaca dari secret GCP_KEY_JSON
+client = get_bq_client(project_id)
 
-sql = """
-    SELECT * 
-    FROM `$project_id.$dataset_id.$table_name` 
-    LIMIT 10
+prql = """
+prql target:sql.bigquery
+
+from `$project_id.$dataset_id.$table_name`
+take 10
 """
 
-df = run_query(client, sql)
+df = run_prql(client, prql)
 println(df)
