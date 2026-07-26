@@ -2,7 +2,6 @@
 # 🔐 SECRETS & CREDENTIALS (Sangat Penting untuk GitHub Push Protection)
 # ==============================================================================
 *.json
-/workspaces/datascience/bigquery.json
 .env
 
 # ==============================================================================
