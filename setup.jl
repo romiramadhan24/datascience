@@ -1,13 +1,20 @@
 using Pkg
+
+# 1. Matikan prekompilasi otomatis saat Pkg.add agar tidak memicu kompilasi ulang yang lama
+ENV["JULIA_PKG_PRECOMPILE_AUTO"] = "0"
+
 Pkg.activate(@__DIR__)
 
-# Daftar package paling modern, canggih, dan bersih untuk Data Science & AI
-required_packages = [
+# ==============================================================================
+# 📦 DAFTAR PACKAGE JULIA
+# ==============================================================================
+required_julia_packages = [
     # Manipulasi Data Modern & Clean
     "DataFrames",
-    "TidierData",         # Manipulasi data paling clean (tanpa butuh simbol :)
+    "TidierData",         # Manipulasi data paling clean
     "CSV",
     "JSON",
+    "JSON3",
     "Arrow",
     "CategoricalArrays",
 
@@ -16,18 +23,18 @@ required_packages = [
     "Distributions",
     "HypothesisTests",
 
-    # Database (PostgreSQL)
+    # Database & GCP
     "LibPQ",
     "DBInterface",
     "HTTP",
     "DotEnv",
     "GoogleCloud",
 
-    # Machine Learning & Deep Learning Modern
+    # Machine Learning & Deep Learning
     "MLJ",                # Ekosistem ML Klasik
     "GLM",                # Regresi Linear & Logistik
-    "EvoTrees",           # Gradient Boosting kencang berbasis Julia
-    "Lux",                # Deep Learning paling modern & stateful
+    "EvoTrees",           # Gradient Boosting berbasis Julia
+    "Lux",                # Deep Learning modern
     "JuMP",               # Optimasi Matematis
 
     # Notebook & Produktivitas
@@ -38,22 +45,47 @@ required_packages = [
     "ProgressMeter",
     "PrettyTables",
 
-    # Integrasi Python Modern
-    "PythonCall"
+    # Integrasi Python & Conda
+    "PythonCall",
+    "CondaPkg"
 ]
 
-# 1. Cek dan instal package yang belum ada di folder ini
-current_deps = Pkg.project().dependencies
-missing_packages = [p for p in required_packages if !haskey(current_deps, p)]
+# ==============================================================================
+# 🐍 DAFTAR PACKAGE PYTHON (Via CondaPkg)
+# ==============================================================================
+required_python_packages = [
+    "google-cloud-bigquery",
+    "google-auth"
+]
 
-if !isempty(missing_packages)
-    @info "Menginstal package baru..." missing_packages
-    Pkg.add(missing_packages)
+# ==============================================================================
+# 🚀 PROSES EKSEKUSI SETUP
+# ==============================================================================
+
+# 2. Ambil dependensi Julia yang sudah terdaftar
+current_deps = Pkg.project().dependencies
+missing_julia = [p for p in required_julia_packages if !haskey(current_deps, p)]
+
+# 3. Install paket Julia yang belum ada
+if !isempty(missing_julia)
+    @info "Menginstal paket Julia baru:" missing_julia
+    Pkg.add(missing_julia)
+else
+    @info "Semua paket Julia sudah terdaftar di Project.toml."
 end
 
-# 2. Otomatis update semua package ke versi terbaru
-@info "Memeriksa dan memperbarui versi package..."
-#Pkg.update()
-#Pkg.instantiate()
+# 4. Sinkronkan & Kompilasi Lingkungan Julia
+@info "Menyelaraskan lingkungan (instantiate)..."
+Pkg.instantiate()
 
-@info "Selesai! Environment Julia kamu sudah dalam versi paling canggih dan clean."
+# 5. Install paket Python secara otomatis dari daftar di atas
+using CondaPkg
+@info "Memeriksa dan menginstal paket Python..."
+for py_pkg in required_python_packages
+    CondaPkg.add(py_pkg)
+end
+
+@info "Jalankan prekompilasi paralel..."
+Pkg.precompile()
+
+@info "🎉 Selesai! Environment Julia & Python siap digunakan."

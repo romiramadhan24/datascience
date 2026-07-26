@@ -1,7 +1,9 @@
 [dependencies]
+google-auth = "*"
 openssl = ">=3, <3.6"
 libstdcxx = ">=3.4,<15.0"
 libstdcxx-ng = ">=3.4,<15.0"
+google-cloud-bigquery = "*"
 
     [dependencies.python]
     channel = "conda-forge"

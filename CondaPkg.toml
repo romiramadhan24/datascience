@@ -1,0 +1,3 @@
+[deps]
+google-auth = ""
+google-cloud-bigquery = ""

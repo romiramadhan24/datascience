@@ -1,23 +1,36 @@
-using GoogleCloud
+module BigQueryHelper
 
-const BQ_PROJECT = "database-collection-503407"
-const BQ_DATASET = "dataset"
-const BQ_TABLE_NAME = "worldenergy"
-const BQ_TABLE = "`$BQ_PROJECT.$BQ_DATASET.$BQ_TABLE_NAME`"
+using PythonCall
+using DataFrames
+
+export get_bq_client, run_query
 
 """
-    get_bq_creds()
-
-Mengambil GoogleSession untuk autentikasi GCP.
+Membuat dan mengembalikan objek BigQuery Client.
+Membutuhkan path ke file JSON Service Account.
 """
-function get_bq_creds()
-    tmp_dir = joinpath(@__DIR__, "..", ".tmp")
-    mkpath(tmp_dir)
-    key_path = joinpath(tmp_dir, "gcp_key_temp.json")
-
-    if !isfile(key_path)
-        write(key_path, ENV["GCP_KEY_JSON"])
-    end
-
-    return GoogleSession(key_path)
+function get_bq_client(json_key_path::String, project_id::String)
+    # Import modul Python
+    bigquery = pyimport("google.cloud.bigquery")
+    service_account = pyimport("google.oauth2.service_account")
+    
+    # Gunakan variabel json_key_path dari parameter fungsi
+    credentials = service_account.Credentials.from_service_account_file(json_key_path)
+    
+    # Return client object
+    return bigquery.Client(project=project_id, credentials=credentials)
 end
+
+"""
+Menjalankan query SQL menggunakan client yang diberikan.
+Mengembalikan hasil berupa Julia DataFrame.
+"""
+function run_query(client, sql_query::String)
+    query_job = client.query(sql_query)
+    results_df = query_job.to_dataframe()
+    
+    # Konversi hasil Python Pandas ke Julia DataFrame
+    return DataFrame(pyconvert(Dict, results_df.to_dict(orient="list")))
+end
+
+end # module
