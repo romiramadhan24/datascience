@@ -1,24 +1,11 @@
-# ==============================================================================
-# INDONESIA DATA SCIENCE STACK: MAXIMUM PERFORMANCE BIGQUERY TRANSFERS
-# ==============================================================================
 using PythonCall
 using DataFrames
 using Arrow
-## Kunci Kasta Tertinggi: Tidak ada library transformasi makro (Tidier/Meta) di sini.
-## Kita gunakan fungsi dasar Julia dan operator pipa murni (|>) untuk pemrosesan lokal.
 
-# Hanya import modul Python yang kritis untuk koneksi infrastruktur GCP
 const py_bq   = pyimport("google.cloud.bigquery")
 const py_sa   = pyimport("google.oauth2.service_account")
 const py_json = pyimport("json")
 
-# ==============================================================================
-# 1. AUTENTIKASI EFEKTIF & BERSIH
-# ==============================================================================
-
-"""
-Mengambil client BigQuery menggunakan JSON string dari Environment Variable (Aman untuk Production/CI-CD).
-"""
 function get_bq_client(project_id::String; env_var::String="GCP_KEY_JSON")
     json_str = get(ENV, env_var, "")
     if isempty(json_str)
@@ -30,23 +17,12 @@ function get_bq_client(project_id::String; env_var::String="GCP_KEY_JSON")
     return py_bq.Client(project=project_id, credentials=credentials)
 end
 
-"""
-Mengambil client BigQuery dari file fisik JSON lokal.
-"""
 function get_bq_client(json_key_path::String, project_id::String)
     !isfile(json_key_path) && error("File kredensial tidak ditemukan: $json_key_path")
     credentials = py_sa.Credentials.from_service_account_file(json_key_path)
     return py_bq.Client(project=project_id, credentials=credentials)
 end
 
-# ==============================================================================
-# 2. RUN_QUERY KASTA TERTINGGI: ZERO-COPY ARROW TRANSFER (PERFORMA MAKSIMAL)
-# ==============================================================================
-
-"""
-Mengeksekusi kueri SQL murni ke BigQuery dan mentransfer datanya langsung 
-ke memori RAM Julia tanpa alokasi buffer biner ganda. Menghapus kebocoran RAM.
-"""
 function get_bq_client(project_id::String; env_var::String="GCP_KEY_JSON")
     json_str = get(ENV, env_var, "")
     if isempty(json_str)
@@ -57,17 +33,9 @@ function get_bq_client(project_id::String; env_var::String="GCP_KEY_JSON")
     credentials = py_sa.Credentials.from_service_account_info(info)
     return py_bq.Client(project=project_id, credentials=credentials)
 end
-# ==============================================================================
-# 3. ANTARMUKA UTAMA (SISTEM KASTA TERTINGGI)
-# ==============================================================================
 
-# Set default project ID untuk BigQuery Anda
 const DEFAULT_PROJECT = "database-collection-503407"
 
-"""
-Fungsi `q()` Impian: Menggunakan ANSI SQL murni untuk performa warehouse maksimal,
-menghilangkan lapisan 'prql' untuk menjaga efisiensi JIT Compiler Julia.
-"""
 function q(sql_str::String; project::String=DEFAULT_PROJECT)
     client = get_bq_client(project)
     return run_query(client, sql_str)
