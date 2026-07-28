@@ -6,7 +6,7 @@ const py_json = pyimport("json")
 const py_pa   = pyimport("pyarrow")
 const py_ipc  = pyimport("pyarrow.ipc")
 
-const DEFAULT_PROJECT = "database-collection-503407"
+const db = "database-collection-503407"
 const CLIENT_STORE    = Dict{String, Py}()
 
 function auto_credentials()
@@ -20,7 +20,7 @@ function auto_credentials()
     end
 end
 
-function get_bq_client(project::String = DEFAULT_PROJECT)
+function get_bq_client(project::String = db)
     haskey(CLIENT_STORE, project) && return CLIENT_STORE[project]
     
     creds = auto_credentials()
@@ -29,7 +29,7 @@ function get_bq_client(project::String = DEFAULT_PROJECT)
     return client
 end
 
-function q(sql::String; project::String = DEFAULT_PROJECT, copycols::Bool = false)::DataFrame
+function q(sql::String; project::String = db, copycols::Bool = false)::DataFrame
     client = get_bq_client(project)
     py_arrow_tbl = client.query(sql).to_arrow()
 
