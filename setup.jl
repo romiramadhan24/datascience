@@ -11,24 +11,20 @@ Pkg.activate(@__DIR__)
 required_julia_packages = [
     # Manipulasi Data Modern & Clean
     "DataFrames",
-    "TidierData",         # Manipulasi data paling clean
     "CSV",
     "JSON",
     "JSON3",
     "Arrow",
-    "CategoricalArrays",
 
     # Statistik & Probabilitas
     "StatsBase",
     "Distributions",
     "HypothesisTests",
+    "Statistics",
 
     # Database & GCP
-    "LibPQ",
-    "DBInterface",
     "HTTP",
     "DotEnv",
-    "GoogleCloud",
 
     # Machine Learning & Deep Learning
     "MLJ",                # Ekosistem ML Klasik
@@ -41,9 +37,6 @@ required_julia_packages = [
     "Revise",
     "OhMyREPL",
     "Pluto",
-    "BenchmarkTools",
-    "ProgressMeter",
-    "PrettyTables",
 
     # Integrasi Python & Conda
     "PythonCall",
@@ -60,9 +53,9 @@ required_python_packages = [
 ]
 
 # Paket yang HANYA ada di PyPI (pip)
-required_pip_packages = [
-    "prql-python"
-]
+#required_pip_packages = [
+#    "prql-python"
+#]
 
 # ==============================================================================
 # 🚀 PROSES EKSEKUSI SETUP
@@ -91,10 +84,10 @@ for py_pkg in required_python_packages
     CondaPkg.add(py_pkg)
 end
 
-@info "Memeriksa dan menginstal paket Pip (PyPI)..."
-for pip_pkg in required_pip_packages
-    CondaPkg.add_pip(pip_pkg) # <-- Gunakan add_pip untuk prql-python
-end
+#@info "Memeriksa dan menginstal paket Pip (PyPI)..."
+#for pip_pkg in required_pip_packages
+#    CondaPkg.add_pip(pip_pkg) # <-- Gunakan add_pip untuk prql-python
+#end
 
 @info "Jalankan prekompilasi paralel..."
 Pkg.precompile()
