@@ -24,7 +24,7 @@ deps/src/
 # Documentation build output
 docs/build/
 docs/site/
-datasets/
+data/
 
 # Local preferences
 LocalPreferences.toml

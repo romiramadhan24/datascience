@@ -1,9 +1,0 @@
-channels = ["conda-forge"]
-
-[deps]
-google-auth = ""
-pyarrow = ""
-google-cloud-bigquery = ""
-
-[pip.deps]
-prql-python = ""
