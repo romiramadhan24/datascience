@@ -5,10 +5,23 @@ ENV["JULIA_PKG_PRECOMPILE_AUTO"] = "0"
 Pkg.activate(@__DIR__)
 
 required_julia_packages = [
+
     "DataFrames",
+    "DataFramesMeta",
     "CSV",
+    "Arrow",
     "JSON3",
-    "Revise"
+    "Revise",
+    "Random",      
+    "Lux", 
+    "ComponentArrays",
+    "DifferentialEquations", 
+    "Zygote",
+    "SciMLSensitivity",
+    "Optimization",
+    "OptimizationOptimJL",
+    "OptimizationOptimisers",
+    "CairoMakie"
 ]
 
 current_deps = Pkg.project().dependencies
